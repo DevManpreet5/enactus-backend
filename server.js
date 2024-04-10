@@ -27,9 +27,14 @@ async function connectToMongoDB() {
   console.log("Connected to MongoDB");
 }
 
-connectToMongoDB();
+connectToMongoDB().then(() => {
+  const PORT = 8000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+});
 
-//task4 -admin access needed except when logging, needs admin cookie even when signup
+//task4 -admin access needed  except when loging ,needs admin cookie even when signup
 app.post("/adminsignup", adminauth, admincontroller.createadmin);
 app.post("/adminlogin", admincontroller.loginadmin);
 app.post("/products", adminauth, productController.createProduct);
@@ -38,7 +43,7 @@ app.get("/user/:email", adminauth, admincontroller.getuserinfo);
 app.get("/products/:id", productController.getproduct);
 app.delete("/products/:id", adminauth, productController.deleteproduct);
 
-//task3 cart - user/admin access needed
+//task3 cart - user /admin access needed
 app.post("/signup", usercontroller.createuser);
 app.post("/login", usercontroller.loginuser);
 app.post("/cart/add", authuser, cartcontroller.addcart);
@@ -52,5 +57,3 @@ app.delete("/coupons/:coupon", adminauth, discuntcontroller.deleteCoupon);
 
 //task 2
 app.post("/supplier/modify", adminauth, productController.changeqty);
-
-module.exports = app;
